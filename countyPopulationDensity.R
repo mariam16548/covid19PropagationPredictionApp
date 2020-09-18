@@ -1,5 +1,5 @@
 library(readxl)
-countyInfo <- read_excel("censusCountyData.xlsx")
+countyInfo <- read_excel("data/censusCountyData.xlsx")
 countyPopulationDensity<- function(countyName, stateName) {
   countyName <- paste(countyName,"County")
   tbl.county <- subset(countyInfo, County == countyName) 
