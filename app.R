@@ -86,7 +86,7 @@ app<-shinyApp(
         infectionData<-getInfectionData()
         infectionData$weekDate <- as.Date(infectionData$weekDate, "%m/%d/%Y")
         ggplot(infectionData, aes(x=weekDate, y=caseCount)) +
-          labs(title="COVID-19 Cumulative Case Count in Your Area", x="Dates since 01/22/2020", y = "Infection Count") +
+          labs(title="COVID-19 Cumulative Case Count in Your County", x="Dates since 01/22/2020", y = "Infection Count") +
           theme(plot.title = element_text(hjust = 0.5)) +
           theme(axis.text=element_text(size=12), axis.title=element_text(size=14)) +
           theme(plot.title = element_text(size=16)) +
@@ -96,7 +96,7 @@ app<-shinyApp(
         infectionData<-getInfectionData()
         infectionData$weekDate <- as.Date(infectionData$weekDate, "%m/%d/%Y")
         ggplot(infectionData, aes(x=weekDate, y=currentCaseCount)) +
-          labs(title="COVID-19 Daily Case Count in Your Area", x="Dates since 01/22/2020", y = "Daily Infection Count") +
+          labs(title="COVID-19 Daily Case Count in Your County", x="Dates since 01/22/2020", y = "Daily Infection Count") +
           theme(plot.title = element_text(hjust = 0.5)) +
           theme(axis.text=element_text(size=12), axis.title=element_text(size=14)) +
           theme(plot.title = element_text(size=16)) +
