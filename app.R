@@ -2,7 +2,7 @@ library(shiny)
 library(RUnit)
 library(ggplot2)
 library(scales)
-
+library(here)
 source("riskCalculation.R")
 
 displayColoredBox<- function(color, riskMessage){
@@ -10,7 +10,7 @@ displayColoredBox<- function(color, riskMessage){
                width=12)  
   }
 
-app<-shinyApp(
+shinyApp(
   ui <- fluidPage( 
                   tags$head(
                     tags$style(HTML("
@@ -164,19 +164,3 @@ app<-shinyApp(
     })
     
   })
-
-testServer(app, {
-  session$setInputs(zipcode = 98125) #set the zipcode as 98125
-  session$setInputs(age = 20) #set the age as 20
-  session$setInputs(masking = "Yes") #set input as wearing a mask
-  session$setInputs(groupSize = 1) #set the group size as 1 
-  session$setInputs(alcoholConsumption = "No")  #set input as no alcohol consumption
-  
-  riskAndColor<-getRiskAndColor() #the list/result of the function goes into a variable called riskAndColor
-  checkEquals(riskAndColor$likelihoodOfHarm, 0.09616751, tolerance = 10^-2)  #extract certain element from the list to check its value
-  cat("Correct likelihood of harm value!\n") #if previous line is true, paste the given message 
-  checkEquals(riskAndColor$riskMessage, "Low risk, but still be careful!") #extract certain element from the list to check its value
-  cat("Correct risk message!\n") #if previous line is true, paste the given message 
-  checkEquals(riskAndColor$color, "#bfff80") #extract certain element from the list to check its value
-  cat("Correct color!\n") #if previous line is true, paste the given message 
-})
