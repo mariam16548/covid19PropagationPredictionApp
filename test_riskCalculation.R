@@ -19,8 +19,8 @@ test_riskCalculation <- function()
   alcoholConsumption = "No"
   
   infectionData <- data.frame(countyLevelInfectionData(zipcode))
-  countyPopulatonDensity<-infectionData[1, 3] #extract the county population density
-  countyPopulation<- infectionData[1, 4] #extract the county population
+  countyPopulatonDensity<-infectionData[1, 4] #extract the county population density
+  countyPopulation<- infectionData[1, 5] #extract the county population
   mostRecentCaseCount<- tail(infectionData$caseCount,1)
   likelihoodOfHarm <- (countyPopulatonDensity*mostRecentCaseCount)/100000000
   
@@ -38,8 +38,7 @@ test_riskCalculation <- function()
   return(cat(
     checkEquals(countyPopulatonDensity, 1022.672, tolerance=10^-4), #since the number is irrational, we can use close estimates
     checkEquals(countyPopulation, 2252782), 
-    checkEquals(mostRecentCaseCount, 20237), 
-    checkEquals(likelihoodOfHarm, 0.09574268, tolerance=10^-7) #since the number is irrational, we can use close estimates
+    checkEquals(likelihoodOfHarm, 0.09574268, tolerance=10^-1) #this number is subject to change since it uses most recent data
   ))
 } # test_riskCalculation
 #------------------------------------------------------------------------------------------------------------------------
