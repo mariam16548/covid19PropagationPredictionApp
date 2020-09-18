@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COVID-19 Propagation Prediction Calculator</title>
+</head>
+<style>
+
+p.paragraph {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+p.bulletParagraph {
+  padding-right: 50px;
+}
+
+table, th, td {
+  border: 2px solid black;
+  padding: 8px;
+}
+table {
+  border-spacing: 0px;
+  border-collapse:collapse;
+  text-align:center;
+
+}
+</style>
+
+<body>
+<h2 style="text-align: center;padding-left: 100px;padding-right: 100px;"><strong>PROJECT 
+NARRATIVE</strong></h2>
+
+<p class="paragraph">We propose a Shiny web app that will help members of the public answer 
+ the following question: "Will your actions today likely propagate 
+ COVID-19 to your community?". Our app will answer this question using the population
+ density and number of cases in a given county. The target audience for our application
+ will be college students who are likely living on campus and socializing with others.
+ When faced with only a vague sense of the risk, people can make poor COVID-related 
+ choices. In our app, we quantify the risk by combining local data with their social
+ plans, which helps people make informed decisions. This is done through software 
+ combining epidemiological and population data, modeling behavior (alcohol consumption, 
+ mask wear, number of participants) to calculate risk in an easy-to-use interface 
+ rendered in vivid display.</p>
+ 
+ 
+<p></p>
+ <p class="paragraph">COVID-19 is a large concern nationally, especially for college 
+ students. Colleges across the country have opened their campuses to students this fall, 
+ resulting in more opportunities for students to socially gather. At the University of 
+ North Carolina at Chapel Hill, partying and other social events were big factors in the 
+ increased COVID-19 cases. 
+ We wanted to find a way to investigate how alcohol consumption as well as other
+ factors can decrease awareness and negatively affect social distancing procedures.
+ We came up with a Shiny app, which allows users to create interactive web applications,
+ to look into this further. This project applies engineering design to produce 
+ solutions that meet specified needs with consideration of public health and safety,
+ as well as social and environmental factors to encourage social distancing measures.
+ When the risk is calculated to be “extremely high” and the message of “stay home!”
+ appears, the user will be more inclined to listen because of the personalized 
+ experience the web app provides.
+</p>
+<h3 style="text-align: center;"><strong>Plan of Operation</strong></h3>
+<ul>
+<strong><strong>Project design</strong></strong>
+</ul>
+<p class="paragraph">We have a prototype that predicts the likelihood of contagious spread
+ through two factors: county population density (people per square mile)
+ and the number of cases in a given county. We use the latest COVID-19 statistics that are
+ obtained in real-time through &nbsp;</span><a 
+ href="https://www.knowi.com/coronavirus-dashboards/covid-19-api/">Knowi's public data 
+ access API</span></a>
+ <span style="font-weight: 400;">The app combines empirical data (population and 
+ infection density, transmission rates) with individual social circumstances (group size, 
+ age, alcohol use, mask wear) to predict the risk of COVID-19 spread from a planned social
+ activity. We use a variety of models (see "Modeling and Implementation Details" section)
+ and we produce a range of risk estimates. From this, users of the app are able to 
+ predict the consequences of their actions.</p>
+<p>&nbsp;</p>
+<ul>
+<strong>Modeling and Implementation Details</strong>
+</ul>
+<p class="paragraph">The COVID-19 data is currently only available at the county level. 
+In order to make 
+ sure that the users are able to use their zip code, we used 
+ the&nbsp;<a href="https://github.com/scpike/us-state-county-zip">U.S. 
+ Census data</span></a><span style="font-weight: 400;">&nbsp;to link the zip code to 
+ the appropriate county. From there, it made it easier to then find the corresponding 
+ statistics. In order to produce an estimate for the risk I used the
+ following sources:</p>
+<ul>
+
+
+
+<ul class="paragraph">
+<li>MASK WEAR: According 
+to&nbsp;<a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)31142-9/fulltext">this</a>&nbsp;paper, 
+wearing a mask lowers an individual's risk of contracting the disease by 65%.&nbsp;</li>
+
+</ul>
+
+
+<p></p>
+
+<ul class="paragraph">
+
+<li> 
+<p>ALCOHOL CONSUMPTION: 
+In&nbsp;<a href="https://one.nhtsa.gov/people/injury/research/pub/HS809028/index_.htm">this</a>&nbsp;paper,
+ it was found that a .08 BAC resulted in an average of 66% impairment in the form of 
+ lowered awareness, which would therefore make it more difficult to maintain social 
+ distancing measures. </p> 
+ </li>
+ 
+ </ul>
+ 
+<p></p>
+
+
+<ul class="paragraph">
+
+<li class="bulletPoints">AGE: 
+ </ul>
+
+<ul>
+<li style="margin-left: 50px;"><span ><span ><a
+ data-mce-href="https://www.voterstudygroup.org/covid-19-updates" 
+ href="https://www.voterstudygroup.org/covid-19-updates"><span 
+ >This</span></a><span data-mce-style="font-weight: 400;" 
+ style="font-weight: 400;">&nbsp;survey found that 45% of people under 30 are socializing
+  with people they do not live with and not social distancing</span></span></span></li>
+
+<li style="margin-left: 50px;"><span ><span ><a 
+href="https://covid.idmod.org/data/Inequities_in_COVID-19_dynamics.pdf">This</a>&nbsp;study
+ found that around 40% of COVID cases are from people under 30.&nbsp;</li>
+<li style="margin-left: 50px;"><span ><span >Therefore, around 16% of 
+young people (likely asymptomatic) are engaging in risky behavior (.40*.45)</span></li>
+<li style="margin-left: 50px;"><span ><span >There is an</span>&nbsp;<a
+ href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)31183-1/fulltext">82%
+  risk reduction</a>&nbsp;when social distancing</li>
+<li style="margin-left: 50px;"><span ><span >1-(.82*(1-.16)) = .31
+ &rarr; &nbsp;31% risk increase for young people under the age of 30</span><span 
+ style="font-weight: 400;">&nbsp;</span></li>
+
+</ul>
+</ul>
+<ul>
+<p></p>
+
+<ul class="paragraph">
+
+<li>GROUP SIZE: We followed the same method as&nbsp;<a 
+href="https://covid19risk.biosci.gatech.edu/"><span style="font-weight: 400;">this</a> 
+COVID-19 event risk assessment calculator.</li>
+</ul>
+
+
+</ul>
+<p>&nbsp;</p>
+<p class="bulletParagraph">Through these modeling estimates, we can produce a 
+range of risk estimates:&nbsp;</span></p>
+<p class="bulletParagraph">Figure 1. User interface output depending on the likelihood of 
+harm</p>
+
+<table style="width:70%">
+  <tr>
+    <th>Estimated likelihood of harm</th>
+    <th>Text box color</th> 
+    <th>Risk message in the text box</th>
+  </tr>
+  <tr>
+    <td>.85 to greater than 1</td>
+    <td>Red</td>
+    <td>Extreme risk, stay home!</td>
+
+  </tr>
+  <tr>
+    <td>Within the range of .65 to .85</td>
+    <td>Orange</td>
+    <td>Very high risk, stay home!</td>
+  </tr>
+  <tr>
+    <td>Within the range of .35 to .65</td>
+    <td>Yellow</td>
+    <td>High risk, be careful!</td>
+    
+  </tr>
+   <tr>
+    <td>Within the range of .10 to .35</td>
+    <td>Blue</td>
+    <td>Moderate risk, be careful!</td>
+  </tr>
+  
+   <tr>
+    <td>Less than .10</td>
+    <td>Green</td>
+    <td>Low risk, but still be careful!</td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+
+</body>
+</html>
