@@ -12,11 +12,11 @@ test_riskCalculation <- function()
 {
   message(sprintf("--- test_riskCalculation"))
   
-  zipcode=98125
-  masking="Yes"
-  age=20
-  groupSize=1
-  alcoholConsumption = "No"
+  zipcode<-98125
+  masking<- "Yes"
+  age<-20
+  groupSize<-1
+  alcoholConsumption <- "No"
   
   infectionData <- data.frame(countyLevelInfectionData(zipcode))
   countyPopulatonDensity<-infectionData[1, 4] #extract the county population density
