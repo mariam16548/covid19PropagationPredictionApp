@@ -3,7 +3,7 @@ library(RUnit)
 library(ggplot2)
 library(scales)
 
-source("riskCalculation.R")
+source("R/riskCalculation.R")
 
 displayColoredBox<- function(color, riskMessage){
   sidebarPanel(h3(sprintf("%s", riskMessage), align = "center"), style=sprintf("background-color: %s; height: 120px;", color), 
