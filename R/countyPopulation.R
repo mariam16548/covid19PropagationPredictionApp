@@ -1,5 +1,5 @@
 library(readxl)
-countyPopulationStats <- read_excel("data/censusCountyPopulationsData.xlsx")
+countyPopulationStats <- read_excel("censusCountyPopulationsData.xlsx")
 countyPopulation<- function(countyName, stateName) {
   countyName <- paste0(".",countyName," ", "County,", " ",stateName)
   tbl.county <- subset(countyPopulationStats, County == countyName) 
