@@ -1,5 +1,5 @@
 library(dplyr)
-source("R/countyLevelInfectionData.R")
+source("countyLevelInfectionData.R")
 
 riskCalculation<- function(zipcode, masking, age, groupSize, alcoholConsumption) {
   infectionData <- data.frame(countyLevelInfectionData(zipcode))
