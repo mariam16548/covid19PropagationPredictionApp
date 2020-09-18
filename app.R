@@ -2,7 +2,7 @@ library(shiny)
 library(RUnit)
 library(ggplot2)
 library(scales)
-library(here)
+
 source("riskCalculation.R")
 
 displayColoredBox<- function(color, riskMessage){
