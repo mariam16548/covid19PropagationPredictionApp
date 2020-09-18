@@ -6,26 +6,25 @@ library(here)
 source("riskCalculation.R")
 
 displayColoredBox<- function(color, riskMessage){
-  sidebarPanel(h3(sprintf("%s", riskMessage), align = "center"), style=sprintf("background-color: %s; height: 120px;", color), 
-               width=12)  
+  sidebarPanel(h3(sprintf("%s", riskMessage), align = "center"), style=sprintf("background-color: %s; height: 120px;", color),
+               width=12)
   }
 
-shinyApp(
-  ui <- fluidPage( 
+ui <- fluidPage(
                   tags$head(
                     tags$style(HTML("
   #age, #zipcode, #groupSize {
     width: 30%;
   }
-"))), 
+"))),
       tabsetPanel(id = "tabs", tabPanel(h5("Introduction"), htmlTemplate("www/introduction.html")),
-                tabPanel(h5("Risk Calculator"), 
+                tabPanel(h5("Risk Calculator"),
 
                         titlePanel(h2("Will your actions today likely propagate COVID-19 to your community?", align = "center"), "COVID-19 Propagation Prediction Calculator"),
-                                  
+
                           sidebarLayout(position = "left",
-                                  sidebarPanel("",  
-                                         textInput("zipcode", label="Enter your zipcode.", value = 98125), 
+                                  sidebarPanel("",
+                                         textInput("zipcode", label="Enter your zipcode.", value = 98125),
                                          numericInput("age", label="Enter your age.", value = ""),
                                          radioButtons("masking", "Will you wear a mask?",
                                                     c("Yes", "No")),
@@ -33,18 +32,18 @@ shinyApp(
                                                     c("Yes", "No")),
                                          numericInput("groupSize", label="How many people (outside your household) will be with you?", value = ""),
                                          actionButton("button", "See daily case count trends")),
-                                                     
+
                                   mainPanel("",
-                                         fluidRow( 
-                                           uiOutput("coloredBox"),   
+                                         fluidRow(
+                                           uiOutput("coloredBox"),
                                            plotOutput("histogramOfCases", width="100%", height="500px"))
                                             )  )
-                              ), 
+                              ),
                               tabPanel(h5("Future Work"), htmlTemplate("www/futureWork.html"))
-                  ) ),
-  
+                  ) )
+
   server <- function(input, output, session) {
-    
+
     observeEvent(input$zipcode,{     #limits zipcode input to 5 numbers only
       if(nchar(input$zipcode)!=5)
       {
@@ -65,22 +64,22 @@ shinyApp(
       }
     }
     )
-    
+
     getInfectionData <- reactive({
       req(input$zipcode)
-      
+
       zipcode <- input$zipcode
-      
+
       infectionData <- data.frame(countyLevelInfectionData(zipcode))
       infectionData
     })
-    
+
     whichplot <- reactiveVal(TRUE)
-    
+
     observeEvent(input$button, {
       whichplot(!whichplot())
     })
-    
+
     which_graph <- reactive({
       if (whichplot()) {
         infectionData<-getInfectionData()
@@ -91,7 +90,7 @@ shinyApp(
           theme(axis.text=element_text(size=12), axis.title=element_text(size=14)) +
           theme(plot.title = element_text(size=16)) +
           geom_bar(stat="identity", color="red", fill="white") +
-          scale_x_date(breaks = date_breaks("1 month"),labels = date_format("%m/%d/%y"))     
+          scale_x_date(breaks = date_breaks("1 month"),labels = date_format("%m/%d/%y"))
       } else {
         infectionData<-getInfectionData()
         infectionData$weekDate <- as.Date(infectionData$weekDate, "%m/%d/%Y")
@@ -104,7 +103,7 @@ shinyApp(
           scale_x_date(breaks = date_breaks("1 month"),labels = date_format("%m/%d/%y"))
       }
     })
-    
+
     observeEvent(input$button, {
       if (input$button %% 2 == 1) {
         txt <- "See cumulative case count trends"
@@ -113,27 +112,27 @@ shinyApp(
       }
       updateActionButton(session, "button", label = txt)
     })
-    
-    getRiskAndColor<-reactive({ 
+
+    getRiskAndColor<-reactive({
       req(input$zipcode)
       req(input$age)
       req(input$masking)
       req(input$groupSize)
       req(input$alcoholConsumption)
-      
+
       zipcode <- input$zipcode
       age <- input$age
       masking <- input$masking
       groupSize <- input$groupSize
       alcoholConsumption <- input$alcoholConsumption
-      
+
       likelihoodOfHarm<- riskCalculation(zipcode, masking, age, groupSize, alcoholConsumption)
-      
+
       #designing the coloredBox
       if (likelihoodOfHarm>.85) {
         color<-"red"
         riskMessage<-"Extreme risk, stay home!"
-        
+
       } else if (likelihoodOfHarm>.65){
         color<-"orange"
         riskMessage<-"Very high risk, stay home!"
@@ -149,18 +148,22 @@ shinyApp(
         color<-"#bfff80" #this shade of green isn't too dark
         riskMessage<-"Low risk, but still be careful!"
       }
-      list(color=color, riskMessage=riskMessage, likelihoodOfHarm=likelihoodOfHarm) 
+      list(color=color, riskMessage=riskMessage, likelihoodOfHarm=likelihoodOfHarm)
       # making these variables the result from the getRiskAndColor() function as global variables, not local ones
     })
-    
+
     output$coloredBox<-renderUI({
       riskAndColor<-getRiskAndColor() #the list/result of the function goes into a variable called riskAndColor
       displayColoredBox(riskAndColor$color, riskAndColor$riskMessage) #extract certain elements from the list to plug into the displayColoredBox() function
       #the output will be the output of the displayColorBox() function
     })
-    
+
     output$histogramOfCases <- renderPlot({
       which_graph()
     })
-    
-  })
+
+  } # server
+
+runApp(shinyApp(ui, server), port=9012)
+
+
