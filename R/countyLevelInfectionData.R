@@ -1,6 +1,6 @@
-source("zipcodeToCounty.R")
-source("countyPopulationDensity.R")
-source("countyPopulation.R")
+source("R/zipcodeToCounty.R")
+source("R/countyPopulationDensity.R")
+source("R/countyPopulation.R")
 
 countyLevelInfectionData<- function(zip, startDate=NA, endDate=NA) { #dates must be written in "XX/XX/XXXX" format (make sure written as a STRING)
   countyStateNames <- zipcodeToCounty(zip)
