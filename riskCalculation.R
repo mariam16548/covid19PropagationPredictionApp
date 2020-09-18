@@ -3,8 +3,8 @@ source("countyLevelInfectionData.R")
 
 riskCalculation<- function(zipcode, masking, age, groupSize, alcoholConsumption) {
   infectionData <- data.frame(countyLevelInfectionData(zipcode))
-  countyPopulatonDensity<-infectionData[1, 3] #extract the county population density
-  countyPopulation<- infectionData[1, 4] #extract the county population
+  countyPopulatonDensity<-infectionData[1, 4] #extract the county population density
+  countyPopulation<- infectionData[1, 5] #extract the county population
   mostRecentCaseCount<- tail(infectionData$caseCount,1)
   likelihoodOfHarm <- (countyPopulatonDensity*mostRecentCaseCount)/100000000
   
