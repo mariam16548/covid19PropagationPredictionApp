@@ -1,3 +1,5 @@
+library(dplyr)
+
 source("zipcodeToCounty.R")
 source("countyPopulationDensity.R")
 source("countyPopulation.R")
@@ -45,7 +47,7 @@ countyLevelInfectionData<- function(zip, startDate=NA, endDate=NA) { #dates must
       tbl.countyCases <- tbl.countyCases[startDateRowNumber:endDateRowNumber,,drop=F]
       tbl.countyCases$countyPopulationDensity<- countyPopulationDensity(countyName, stateName) #create a new column with pop density
       tbl.countyCases$countyPopulation<- countyPopulation(countyName, stateName) #create a new column with pop 
-      print(data.frame(tbl.countyCases), row.names = FALSE)
+      tbl.countyCases<-tbl_df(tbl.countyCases)
       
     }
   }
