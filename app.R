@@ -11,59 +11,66 @@ displayColoredBox<- function(color, riskMessage){
   }
 
 ui <- fluidPage(
-                  tags$head(
-                    tags$style(HTML("
+  tags$head(
+    tags$style(HTML("
   #age, #zipcode, #groupSize {
     width: 30%;
   }
 "))),
-      tabsetPanel(id = "tabs", tabPanel(h5("Introduction"), htmlTemplate("www/introduction.html")),
-                tabPanel(h5("Risk Calculator"),
-
-                        titlePanel(h2("Will your actions today likely propagate COVID-19 to your community?", align = "center"), "COVID-19 Propagation Prediction Calculator"),
-
-                          sidebarLayout(position = "left",
-                                  sidebarPanel("",
-                                         textInput("zipcode", label="Enter your zipcode.", value = 98125),
-                                         numericInput("age", label="Enter your age.", value = ""),
-                                         radioButtons("masking", "Will you wear a mask?",
-                                                    c("Yes", "No")),
-                                         radioButtons("alcoholConsumption", "Will you be under the influence of alcohol outside of your home?",
-                                                    c("Yes", "No")),
-                                         numericInput("groupSize", label="How many people (outside your household) will be with you?", value = ""),
-                                         actionButton("button", "See daily case count trends")),
-
-                                  mainPanel("",
-                                         fluidRow(
-                                           uiOutput("coloredBox"),
-                                           plotOutput("histogramOfCases", width="100%", height="500px"))
-                                            )  )
-                              ),
-                              tabPanel(h5("Future Work"), htmlTemplate("www/futureWork.html"))
-                  ) )
+  tags$style(type="text/css",
+             ".shiny-output-error { visibility: hidden; }",
+             ".shiny-output-error:before { visibility: hidden; }" ),
+  tabsetPanel(id = "tabs", tabPanel(h5("Introduction"), htmlTemplate("www/introduction.html")),
+              tabPanel(h5("Risk Calculator"),
+                       
+                       titlePanel(h2("Will your actions today likely propagate COVID-19 to your community?", align = "center"), "COVID-19 Propagation Prediction Calculator"),
+                       
+                       sidebarLayout(position = "left",
+                                     sidebarPanel("",
+                                                  textInput("zipcode", label="Enter your zipcode.", value = 98125),
+                                                  numericInput("age", label="Enter your age.", value = ""),
+                                                  radioButtons("masking", "Will you wear a mask?",
+                                                               c("Yes", "No")),
+                                                  radioButtons("alcoholConsumption", "Will you be under the influence of alcohol outside of your home?",
+                                                               c("Yes", "No")),
+                                                  numericInput("groupSize", label="How many people (outside your household) will be with you?", value = ""),
+                                                  actionButton("button", "See daily case count trends")),
+                                     
+                                     mainPanel("",
+                                               fluidRow(
+                                                 uiOutput("coloredBox"),
+                                                 plotOutput("histogramOfCases", width="100%", height="500px"))
+                                     )  )
+              ), tabPanel(h5("Future Work"), htmlTemplate("www/futureWork.html"))) )
 
   server <- function(input, output, session) {
 
-    observeEvent(input$zipcode,{     #limits zipcode input to 5 numbers only
-      if(nchar(input$zipcode)!=5)
+  zipcode <- reactive(input$zipcode)
+    zipcode_d <- debounce(zipcode, millis = 2000)
+    observeEvent(zipcode_d(), {
+      #limits zipcode input to 5 numbers only
+      if (nchar(zipcode_d()) != 5)
       {
-        updateTextInput(session,'zipcode',value=98125)
-        showModal(modalDialog(
-          title = "Error!",
-          "Only 5-character entries are permitted.",
-          easyClose = TRUE
-        ))
+        updateTextInput(session, 'zipcode', value = 98125)
+        showModal(
+          modalDialog(
+            title = "Error!",
+            "Only 5-character entries are permitted.",
+            easyClose = TRUE
+          )
+        )
       }
-      if(is.na(as.numeric(input$zipcode)))
+      if (is.na(as.numeric(zipcode_d())))
       {
-        showModal(modalDialog(
-          title = "Error!",
-          "Only numeric values are allowed. Please try again.",
-          easyClose = TRUE
-        ))
+        showModal(
+          modalDialog(
+            title = "Error!",
+            "Only numeric values are allowed. Please try again.",
+            easyClose = TRUE
+          )
+        )
       }
-    }
-    )
+    })
 
     getInfectionData <- reactive({
       req(input$zipcode)
@@ -106,11 +113,11 @@ ui <- fluidPage(
 
     observeEvent(input$button, {
       if (input$button %% 2 == 1) {
-        txt <- "See cumulative case count trends"
+        buttonText <- "See cumulative case count trends"
       } else {
-        txt <- "See daily case count trends"
+        buttonText <- "See daily case count trends"
       }
-      updateActionButton(session, "button", label = txt)
+      updateActionButton(session, "button", label = buttonText)
     })
 
     getRiskAndColor<-reactive({
@@ -165,5 +172,3 @@ ui <- fluidPage(
   } # server
 
 runApp(shinyApp(ui, server), port=9012)
-
-
