@@ -1,22 +1,25 @@
+options(warn = -1) 
 library(dplyr)
-source("countyLevelInfectionData.R")
+suppressWarnings(suppressMessages(source("countyLevelInfectionData.R")))
 
-riskCalculation<- function(zipcode, masking, age, groupSize, alcoholConsumption) {
-  infectionData <- data.frame(countyLevelInfectionData(zipcode))
+riskCalculation<- function(zipcode, masking, age, air, groupSize, alcoholConsumption) {
+  infectionData <- suppressWarnings(suppressMessages(data.frame(countyLevelInfectionData(zipcode))))
   countyPopulatonDensity<-infectionData[1, 4] #extract the county population density
   countyPopulation<- infectionData[1, 5] #extract the county population
   mostRecentCaseCount<- tail(infectionData$caseCount,1)
-  likelihoodOfHarm <- (countyPopulatonDensity*mostRecentCaseCount)/100000000
-  
+  likelihoodOfHarm <- (countyPopulatonDensity*mostRecentCaseCount)/500000000
+
   likelihoodOfHarm <- if_else(masking == "Yes", likelihoodOfHarm * 0.35, likelihoodOfHarm)
-  likelihoodOfHarm <- if_else(age < 30, likelihoodOfHarm * 1.31, likelihoodOfHarm)
+  likelihoodOfHarm <- if_else(air== "indoors", likelihoodOfHarm * 18.7, likelihoodOfHarm)
   
-  
+  likelihoodOfHarm <- if_else(age== "under 30", likelihoodOfHarm * 1.31, likelihoodOfHarm)
+
+  likelihoodOfHarm <- if_else(alcoholConsumption == "Yes", likelihoodOfHarm * 1.66, likelihoodOfHarm)  
+
   likelihoodOfHarm <- case_when(
     groupSize > 0 ~ likelihoodOfHarm * (1+(1-((1-(mostRecentCaseCount/countyPopulation))^groupSize))), 
     groupSize == 0 ~ likelihoodOfHarm
   )
-  likelihoodOfHarm <- if_else(alcoholConsumption == "Yes", likelihoodOfHarm * 1.66, likelihoodOfHarm)  
   
   return(likelihoodOfHarm)
 }
@@ -38,3 +41,6 @@ riskCalculation<- function(zipcode, masking, age, groupSize, alcoholConsumption)
 
 #source for groupSize calculation: 
   #https://covid19risk.biosci.gatech.edu/
+
+#source for indoors/outdoors: 
+#https://www.medrxiv.org/content/10.1101/2020.02.28.20029272v2
