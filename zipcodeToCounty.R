@@ -6,6 +6,7 @@ countyFIPSInfo <- read.csv("data/FIPStoCountyAbbrev.csv")
 
 zipcodeToCounty <- function(zipcode) {
   zipcode<-sapply(zipcode, function(x){if(nchar(x)==3){paste0(0,0,x)}else{x}})
+  zipcode<-sapply(zipcode, function(x){if(nchar(x)==4){paste0(0,x)}else{x}})
   tbl.county <- subset(zipFIPSInfo, ZIP == zipcode)
   countyFIPS <- tbl.county$COUNTY
   tbl.countyFIPS <- subset(countyFIPSInfo, FIPS == countyFIPS)
