@@ -6,7 +6,8 @@ biocGet <- function(pkgs){
    }
 
 
-code.pkgs <- c("RUnit", "ggplot2", "scales", "here", "dplyr", "openssl", "httr", "readr", "readxl")
+code.pkgs <- c("RUnit", "xml2", "tidyverse", "ggplot2", "scales", "here", "dplyr", "openssl",
+               "httr", "readr", "readxl", "data.table")
 
 for(code.pkg in code.pkgs){
    suppressWarnings(

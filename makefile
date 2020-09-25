@@ -1,8 +1,8 @@
-ID = 18sep2020
+ID = 25sep2020
 IMAGE_NAME = covidrisk_$(ID)
 
 default:
-	@echo targets:  shiny build
+	@echo targets:  build bash
 
 build:
 	docker build -t $(IMAGE_NAME) -f Dockerfile .

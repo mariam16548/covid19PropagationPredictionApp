@@ -6,9 +6,10 @@ RUN mkdir /home/shiny/data
 COPY data/* /home/shiny/data/
 COPY installPrerequisites.R .
 RUN apt-get update && apt-get install -y \
-     libssl-dev
+     libssl-dev \
+     libxml2-dev
+
 #    libcurl4-openssl-dev 
-#    libxml2-dev \
 #    libssl-dev \
 #    libcairo2-dev \
 #    libxt-dev \
