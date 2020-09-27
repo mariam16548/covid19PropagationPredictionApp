@@ -1,10 +1,10 @@
-library(shiny)
-library(RUnit)
-library(ggplot2)
-library(scales)
-library(tidyverse)
-library(lubridate)
-library(data.table)
+suppressWarnings(suppressMessages(library(shiny)))
+suppressWarnings(suppressMessages(library(RUnit)))
+suppressWarnings(suppressMessages(library(ggplot2)))
+suppressWarnings(suppressMessages(library(scales)))
+suppressWarnings(suppressMessages(library(tidyverse)))
+suppressWarnings(suppressMessages(library(lubridate)))
+suppressWarnings(suppressMessages(library(data.table)))
 
 suppressWarnings(suppressMessages(source("riskCalculation.R")))
 
@@ -44,7 +44,7 @@ ui <- suppressWarnings(suppressMessages(fluidPage(
           sidebarPanel(
             "",
             textInput("zipcode", label =
-                        "Enter your zipcode.", value = ""),
+                        "Enter your zipcode.", value = "98125"),
             
             radioButtons("age", "Select your age bracket.",
                          c("under 30", "30 or over")),
@@ -98,24 +98,19 @@ ui <- suppressWarnings(suppressMessages(fluidPage(
           suppressWarnings(suppressMessages(infectionData$weekDate))
         caseCount <-
           suppressWarnings(suppressMessages(infectionData$caseCount))
-        
-        
+
         infectionData <- data.table(infectionData)
-        
-        infectionBiWeeklyData=infectionData[, .(caseCount = sum(caseCount)), 
-                                            keyby = .(date = 14 * (as.numeric(date - min(date)) %/% 14) + min(date))]
-        
-        
-        ggplot(infectionBiWeeklyData, aes(x = infectionBiWeeklyData$date, y = infectionBiWeeklyData$caseCount)) +
+
+        ggplot(infectionData, aes(x = date, y = caseCount)) +
           labs(title = "COVID-19 Cumulative Case Count in Your County", y = "Infection Count") +
           theme(plot.title = element_text(hjust = 0.5)) +
-          theme(axis.text = element_text(size = 12),
+          theme(axis.text = element_text(size = 10),
                 axis.title = element_text(size = 14)) +
           theme(plot.title = element_text(size = 16)) +
           geom_bar(stat = "identity",
                    color = "white",
                    fill = "red") +
-          scale_x_date(NULL, date_labels = "%b %d", breaks = infectionBiWeeklyData$date)
+          scale_x_date(NULL, date_labels = "%b %d", breaks = "2 weeks")
       } else {
         dailyInfectionData <-
           suppressWarnings(suppressMessages(getInfectionData()))
@@ -133,20 +128,16 @@ ui <- suppressWarnings(suppressMessages(fluidPage(
         
         dailyInfectionData <- data.table(dailyInfectionData)
         
-        infectionBiWeeklyData=dailyInfectionData[, .(currentCaseCount = sum(currentCaseCount)), 
-                                                 keyby = .(date = 14 * (as.numeric(date - min(date)) %/% 14) + min(date))]
-        
-        
-        ggplot(infectionBiWeeklyData, aes(x = infectionBiWeeklyData$date, y = infectionBiWeeklyData$currentCaseCount)) +
-          labs(title = "COVID-19 Curent Case Count in Your County", y = "Biweekly Infection Count") +
+        ggplot(dailyInfectionData, aes(x = date, y = currentCaseCount)) +
+          labs(title = "COVID-19 Curent Case Count in Your County", y = "Daily Infection Count") +
           theme(plot.title = element_text(hjust = 0.5)) +
-          theme(axis.text = element_text(size = 12),
+          theme(axis.text = element_text(size = 10),
                 axis.title = element_text(size = 14)) +
           theme(plot.title = element_text(size = 16)) +
           geom_bar(stat = "identity",
                    color = "white",
                    fill = "red") +
-          scale_x_date(NULL, date_labels = "%b %d", breaks = infectionBiWeeklyData$date)
+          scale_x_date(NULL, date_labels = "%b %d", breaks = "2 weeks")
       }
     }) 
     
