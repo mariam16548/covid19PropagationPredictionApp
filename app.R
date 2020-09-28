@@ -75,6 +75,8 @@ ui <- suppressWarnings(suppressMessages(fluidPage(
     ))))
 
   server <- function(input, output, session) {
+    groupSize <- reactive(input$groupSize)
+    groupSizeInput <- debounce(groupSize,2000)
     getInfectionData <- reactive({
       req(nchar(input$zipcode) == 5)      
       zipcode <- input$zipcode
@@ -156,7 +158,7 @@ ui <- suppressWarnings(suppressMessages(fluidPage(
       req(input$age)
       req(input$air)
       req(input$masking)
-      req(input$groupSize>=0)
+      req(groupSizeInput()>=0)
       req(input$alcoholConsumption)
       
       zipcode <- input$zipcode
@@ -167,7 +169,7 @@ ui <- suppressWarnings(suppressMessages(fluidPage(
       alcoholConsumption <- input$alcoholConsumption
       
       likelihoodOfHarm <-
-        riskCalculation(zipcode, masking, age, air, groupSize, alcoholConsumption)
+        riskCalculation(zipcode, masking, age, air, groupSizeInput(), alcoholConsumption)
       
       #designing the coloredBox
       if (likelihoodOfHarm > .85) {
