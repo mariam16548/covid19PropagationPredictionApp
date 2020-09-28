@@ -7,11 +7,11 @@ riskCalculation<- function(zipcode, masking, age, air, groupSize, alcoholConsump
   countyPopulatonDensity<-infectionData[1, 4] #extract the county population density
   countyPopulation<- infectionData[1, 5] #extract the county population
   mostRecentCaseCount<- tail(infectionData$caseCount,1)
-  likelihoodOfHarm <- (countyPopulatonDensity*mostRecentCaseCount)/500000000
-
+  likelihoodOfHarm <- (mostRecentCaseCount*10.5)/(countyPopulation)
+  
   likelihoodOfHarm <- if_else(masking == "Yes", likelihoodOfHarm * 0.35, likelihoodOfHarm)
   likelihoodOfHarm <- if_else(air== "indoors", likelihoodOfHarm * 18.7, likelihoodOfHarm)
-  
+
   likelihoodOfHarm <- if_else(age== "under 30", likelihoodOfHarm * 1.31, likelihoodOfHarm)
 
   likelihoodOfHarm <- if_else(alcoholConsumption == "Yes", likelihoodOfHarm * 1.66, likelihoodOfHarm)  
@@ -44,3 +44,6 @@ riskCalculation<- function(zipcode, masking, age, air, groupSize, alcoholConsump
 
 #source for indoors/outdoors: 
 #https://www.medrxiv.org/content/10.1101/2020.02.28.20029272v2
+
+#source for unreported cases: 
+# https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3635047
