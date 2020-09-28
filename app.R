@@ -76,7 +76,7 @@ ui <- suppressWarnings(suppressMessages(fluidPage(
 
   server <- function(input, output, session) {
     groupSize <- reactive(input$groupSize)
-    groupSizeInput <- debounce(groupSize,2000)
+    groupSizeInput <- debounce(groupSize,1500)
     getInfectionData <- reactive({
       req(nchar(input$zipcode) == 5)      
       zipcode <- input$zipcode
