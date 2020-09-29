@@ -165,7 +165,6 @@ ui <- suppressWarnings(suppressMessages(fluidPage(
       age <- input$age    
       air <- input$air
       masking <- input$masking
-      groupSize <- input$groupSize
       alcoholConsumption <- input$alcoholConsumption
       
       likelihoodOfHarm <-
