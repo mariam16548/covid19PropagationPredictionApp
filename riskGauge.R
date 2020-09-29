@@ -9,7 +9,9 @@ riskGauge <- function(pos,breaks=c(0, 10, 35, 65, 90, 100)) {
     y        <- c(r1*sin(th),rev(r2*sin(th)))
     return(data.frame(x,y))
   }
-  pos_per <-  paste(round(pos,2),"%")#create output for gauge with % 
+  pos_per <- ifelse(pos>=100,
+                    "100 %",
+                    paste(round(pos,2),"%"))#create output for gauge with % 
   
   pos <-ifelse(pos>=100,100,round(pos,1)) #round input value so title below works with decimals 
   title <- case_when(
