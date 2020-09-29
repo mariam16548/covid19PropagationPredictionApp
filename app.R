@@ -212,4 +212,3 @@ ui <- suppressWarnings(suppressMessages(fluidPage(
 
 # runApp(shinyApp(ui, server), port=9012)
 shinyApp(ui, server)
-
