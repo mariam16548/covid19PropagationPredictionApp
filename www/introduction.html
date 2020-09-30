@@ -34,8 +34,8 @@ NARRATIVE</strong></h2>
 
 <p class="paragraph">We propose a Shiny web app that will help members of the public answer 
  the following question: "Will your actions today likely propagate 
- COVID-19 to your community?". Our app will answer this question using the population
- density and number of cases in a given county. The target audience for our application
+ COVID-19 to your community?". Our app will answer this question using the population 
+ and number of cases in a given county. The target audience for our application
  will be college students who are likely living on campus and socializing with others.
  When faced with only a vague sense of the risk, people can make poor COVID-related 
  choices. In our app, we quantify the risk by combining local data with their social
@@ -66,14 +66,14 @@ NARRATIVE</strong></h2>
 <strong><strong>Project design</strong></strong>
 </ul>
 <p class="paragraph">We have a prototype that predicts the likelihood of contagious spread
- through two factors: county population density (people per square mile)
+ through two factors: county population (people per square mile)
  and the number of cases in a given county. We use the latest COVID-19 statistics that are
  obtained in real-time through &nbsp;</span><a 
  href="https://www.knowi.com/coronavirus-dashboards/covid-19-api/">Knowi's public data 
  access API</span></a>
- <span style="font-weight: 400;">The app combines empirical data (population and 
- infection density, transmission rates) with individual social circumstances (group size, 
- age, alcohol use, mask wear) to predict the risk of COVID-19 spread from a planned social
+ <span style="font-weight: 400;">The app combines empirical data (population, case counts,
+ transmission rates) with individual social circumstances (group size, 
+ age, alcohol use, mask wear, indoors/outdoors) to predict the risk of COVID-19 spread from a planned social
  activity. We use a variety of models (see "Modeling and Implementation Details" section)
  and we produce a range of risk estimates. From this, users of the app are able to 
  predict the consequences of their actions.</p>
@@ -170,7 +170,7 @@ harm</p>
     <th>Risk message in the text box</th>
   </tr>
   <tr>
-    <td>Greater than .85</td>
+    <td>Greater than .90</td>
     <td>Red</td>
     <td>Extreme risk, stay home!</td>
 
