@@ -171,7 +171,7 @@ server <- function(input, output, session) {
       riskCalculation(zipcode, masking, age, air, groupSizeInput(), alcoholConsumption)
     
     #designing the coloredBox
-    if (likelihoodOfHarm > .85) {
+    if (likelihoodOfHarm > .90) {
       color <- "red"
       riskMessage <- "Extreme risk, stay home!"
       
